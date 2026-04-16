@@ -9,7 +9,7 @@ class Jabba():
         self.x = 600
         self.y = 275
         self.rect = pygame.Rect(self.x, self.y, 480, 350)
-
+        
     
     def draw(self):
         self.window.blit(self.jabba_image, (self.x, self.y))

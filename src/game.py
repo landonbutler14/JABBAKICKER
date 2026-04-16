@@ -4,6 +4,7 @@ from src.audio_manager import AudioManager
 from src.jabba import Jabba
 from src.player import Player
 from src.button import SimpleButton
+from src.boot import Boot
 
 BLACK = (0, 0, 0)
 WINDOW_WIDTH = 1200
@@ -24,12 +25,20 @@ class Game:
         
         #Player==========================
         self.player = Player()
+        
+        #Boot============================
+        self.boot = Boot("assets/images/boots/boot_basic.png")
+        pygame.mouse.set_visible(True)
 
         #Background=====================
         self.jabbas_palace = pygame.image.load("assets/images/jabbas_palace.jpg").convert()      
-        self.jabbas_palace = pygame.transform.scale(self.jabbas_palace, (WINDOW_WIDTH, WINDOW_HEIGHT))  
+        self.jabbas_palace = pygame.transform.scale(self.jabbas_palace, (WINDOW_WIDTH, WINDOW_HEIGHT)) 
+
         #Jabba============================
         self.jabba = Jabba(self.window)
+        #Jabba Rectangle==================
+        self.jabba_rect = pygame.Rect(600, 275, 480, 350)
+
         #Upgrade Button====================
         
         #start the music=================
@@ -48,13 +57,25 @@ class Game:
                 
 
     def update(self):
-        pass  # game logic goes here
+        mouse_pos = pygame.mouse.get_pos()
+
+        # Check if mouse is over Jabba
+        hovering_jabba = self.jabba_rect.collidepoint(mouse_pos)
+
+        # Update boot
+        self.boot.update(mouse_pos, hovering_jabba)
+
+        # Hide or show cursor
+        pygame.mouse.set_visible(not hovering_jabba)
+
 
     def draw(self):
         self.window.fill(BLACK)
         self.window.blit(self.jabbas_palace, (0, 0))
         self.jabba.draw()
+        self.boot.draw(self.window)
         pygame.display.update()
+
 
     def run(self):
         while self.running:
