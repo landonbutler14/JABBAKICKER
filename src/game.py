@@ -5,7 +5,8 @@ from src.jabba import Jabba
 from src.player import Player
 from src.button import SimpleButton
 from src.boot import Boot
-
+from src.hud import HUD
+from src.settings_panel import SettingsPanel, SettingsSlider
 BLACK = (0, 0, 0)
 WINDOW_WIDTH = 1200
 WINDOW_HEIGHT = 700
@@ -33,12 +34,14 @@ class Game:
         #Background=====================
         self.jabbas_palace = pygame.image.load("assets/images/jabbas_palace.jpg").convert()      
         self.jabbas_palace = pygame.transform.scale(self.jabbas_palace, (WINDOW_WIDTH, WINDOW_HEIGHT)) 
-
+        #Settings======================
+        self.settings = SettingsPanel(self.window, self.audio)
         #Jabba============================
         self.jabba = Jabba(self.window)
         #Jabba Rectangle==================
         self.jabba_rect = pygame.Rect(600, 275, 480, 350)
-
+        #Hud
+        self.hud = HUD(self.window)
         #Upgrade Button====================
         
         #start the music=================
@@ -53,8 +56,9 @@ class Game:
                 self.running = False
 
             if event.type == pygame.MOUSEBUTTONDOWN:
-                self.jabba.get_kicked(event.pos, self.player, self.audio)
-                
+                self.jabba.get_kicked(event.pos, self.player, self.audio, self.boot)
+            self.settings.handle_event(event)
+
 
     def update(self):
         mouse_pos = pygame.mouse.get_pos()
@@ -73,6 +77,8 @@ class Game:
         self.window.fill(BLACK)
         self.window.blit(self.jabbas_palace, (0, 0))
         self.jabba.draw()
+        self.hud.draw(self.player)
+        self.settings.draw()
         self.boot.draw(self.window)
         pygame.display.update()
 

@@ -9,20 +9,19 @@ class Jabba():
         self.x = 600
         self.y = 275
         self.rect = pygame.Rect(self.x, self.y, 480, 350)
-        
-    
+
     def draw(self):
         self.window.blit(self.jabba_image, (self.x, self.y))
         self.rect.topleft = (self.x, self.y)
 
-    def get_kicked(self, mouse_pos, player, audio):
+    def get_kicked(self, mouse_pos, player, audio, boot=None):
         if self.rect.collidepoint(mouse_pos):
             earned = player.kick()
             player.credits += earned
             audio.play_sfx("kick.mp3")
+            if boot is not None:
+                boot.trigger_kick()
             print(f"+{earned} credits! Total: {player.credits}")
             return True
-
         return False
-    
     
