@@ -7,6 +7,7 @@ from src.button import SimpleButton
 from src.boot import Boot
 from src.hud import HUD
 from src.settings_panel import SettingsPanel, SettingsSlider
+from src.boot_upgrade_panel import BootUpgradePanel
 BLACK = (0, 0, 0)
 WINDOW_WIDTH = 1200
 WINDOW_HEIGHT = 700
@@ -43,7 +44,7 @@ class Game:
         #Hud
         self.hud = HUD(self.window)
         #Upgrade Button====================
-        
+        self.upgrade_panel = BootUpgradePanel(self.window)
         #start the music=================
         self.audio.play_music("cantina_band.mp3")
         #============================
@@ -58,6 +59,8 @@ class Game:
             if event.type == pygame.MOUSEBUTTONDOWN:
                 self.jabba.get_kicked(event.pos, self.player, self.audio, self.boot)
             self.settings.handle_event(event)
+            self.upgrade_panel.handle_event(event, self.player)
+
 
 
     def update(self):
@@ -80,6 +83,7 @@ class Game:
         self.hud.draw(self.player)
         self.settings.draw()
         self.boot.draw(self.window)
+        self.upgrade_panel.draw(self.player)
         pygame.display.update()
 
 
